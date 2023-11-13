@@ -37,4 +37,23 @@ describe('HTTP server', () => {
     expect(responseJson.status).toEqual('error');
     expect(responseJson.message).toEqual('terjadi kegagalan pada server kami');
   });
+
+  it('should reject with an invalid token', async () => {
+    // Arrange
+    const requestPayload = {
+      title: 'dicoding',
+      body: 'Dicoding indonesia',
+    };
+    const server = await createServer({}); // fake injection
+
+    // Action
+    const response = await server.inject({
+      method: 'POST',
+      url: '/threads',
+      headers: { Authorization: 'Bearer invalidToken' },
+      payload: requestPayload,
+    });
+
+    expect(response.statusCode).toEqual(401);
+  });
 });
