@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 exports.up = (pgm) => {
   pgm.createTable('comments', {
     id: {
@@ -17,13 +16,14 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
-    deleted_at: {
-      type: 'TEXT',
-      notNull: false,
-    },
     created_at: {
       type: 'TEXT',
       notNull: true,
+    },
+    is_deleted: {
+      type: 'BOOLEAN',
+      notNull: true,
+      default: false,
     },
   });
 
