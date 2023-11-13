@@ -43,7 +43,7 @@ class ThreadsHandler {
     const response = h.response({
       status: 'success',
       data: {
-        addedCommentResp,
+        addedComment: addedCommentResp,
       },
     });
     response.code(201);
