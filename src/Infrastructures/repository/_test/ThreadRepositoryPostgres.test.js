@@ -1,6 +1,6 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
 const Thread = require('../../../Domains/threads/entities/Thread');
@@ -76,6 +76,27 @@ describe('ThreadRepositoryPostgres', () => {
 
       // Action & Assert
       await expect(threadRepositoryPostgres.findThreadById('xxx')).rejects.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('verifyThreadOwner function', () => {
+    it('should throw NotFoundError when thread not exists', async () => {
+      // Arrange
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadRepositoryPostgres.verifyThreadOwner('xxx', 'xxx')).rejects.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('verifyThreadOwner function', () => {
+    it('should throw NotFoundError when thread not owned by user id', async () => {
+      // Arrange
+      ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadRepositoryPostgres.verifyThreadOwner('thread-123', 'xxx')).rejects.toThrowError(AuthorizationError);
     });
   });
 });

@@ -6,6 +6,7 @@ const NewComment = require('../../../Domains/comments/entitties/NewComment');
 const AddedComment = require('../../../Domains/comments/entitties/AddedComment');
 const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('CommentRepositoryPostgres', () => {
   beforeAll(async () => {
@@ -18,6 +19,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   afterAll(async () => {
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
     await pool.end();
@@ -76,6 +78,31 @@ describe('CommentRepositoryPostgres', () => {
         created_at: createdAt,
         is_deleted: false,
       }));
+    });
+  });
+
+  describe('findNotDeletedCommentByIdAndThreadId function', () => {
+    it('should throw NotFoundError when not deleted comment by id and thread id from database not exists', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.findNotDeletedCommentByIdAndThreadId('xxx', 'xxx')).rejects.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('softDeleteComment function', () => {
+    it('should soft delete comment from database', async () => {
+      // Arrange
+      CommentsTableTestHelper.addComment({ id: 'comment-124', created_at: new Date().toISOString() });
+      // Action
+      const fakeIdGenerator = () => '123'; // stub!
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+      await commentRepositoryPostgres.softDeleteComment('comment-124');
+
+      // Assert
+      const deletedComment = await CommentsTableTestHelper.findDeletedCommentById('comment-124');
+      expect(deletedComment).toHaveLength(1);
     });
   });
 });

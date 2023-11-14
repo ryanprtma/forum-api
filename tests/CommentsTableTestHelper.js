@@ -23,6 +23,16 @@ const CommentsTableTestHelper = {
     return result.rows;
   },
 
+  async findDeletedCommentById(id) {
+    const query = {
+      text: 'SELECT * FROM comments WHERE id = $1 and is_deleted = true',
+      values: [id],
+    };
+
+    const result = await pool.query(query);
+    return result.rows;
+  },
+
   async cleanTable() {
     await pool.query('DELETE FROM comments WHERE 1=1');
   },
