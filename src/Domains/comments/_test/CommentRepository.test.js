@@ -24,4 +24,12 @@ describe('CommentRepository interface', () => {
     // Action and Assert
     await expect(commentRepository.softDeleteComment('')).rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
+
+  it('should throw error when invoke abstract behavior', async () => {
+    // Arrange
+    const commentRepository = new CommentRepository();
+
+    // Action and Assert
+    await expect(commentRepository.getCommentsWithUser()).rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  });
 });
