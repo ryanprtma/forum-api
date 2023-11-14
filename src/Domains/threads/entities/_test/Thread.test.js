@@ -18,6 +18,7 @@ describe('Thread entities', () => {
       userId: 'userId',
       title: 'title',
       body: 1234,
+      date: 1234,
     };
 
     // Action & Assert
@@ -31,6 +32,7 @@ describe('Thread entities', () => {
       userId: 'userId',
       title: 'title',
       body: 'body',
+      date: new Date().toISOString(),
     };
 
     // Action
@@ -42,5 +44,6 @@ describe('Thread entities', () => {
     expect(thread.owner).toEqual(payload.userId);
     expect(thread.title).toEqual(payload.title);
     expect(thread.body).toEqual(payload.body);
+    expect(thread.date).toEqual(payload.date);
   });
 });

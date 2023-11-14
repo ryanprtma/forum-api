@@ -10,8 +10,9 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('CommentRepositoryPostgres', () => {
   beforeAll(async () => {
+    const createdAt = new Date().toISOString();
     await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dicoding' });
-    await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+    await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123', createdAt });
   });
 
   afterEach(async () => {

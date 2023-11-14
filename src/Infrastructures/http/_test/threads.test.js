@@ -24,9 +24,11 @@ describe('/threads endpoint', () => {
         password: 'secret',
       };
 
+      const createdAt = new Date().toISOString();
       const threadReqPayload = {
         title: 'dicoding',
         body: 'Dicoding Indonesia',
+        createdAt,
       };
 
       const server = await createServer(container);

@@ -7,9 +7,11 @@ describe('AddThreadUseCase', () => {
   it('should orchestrating the add thread action correctly', async () => {
     // Arrange
     const userId = 'user-123';
+    const createdAt = new Date().toISOString();
     const useCasePayload = {
       title: 'title',
       body: 'body',
+      createdAt,
     };
 
     const mockNewThreadRepository = new Thread({
@@ -17,6 +19,7 @@ describe('AddThreadUseCase', () => {
       userId: 'user-123',
       title: useCasePayload.title,
       body: useCasePayload.body,
+      date: createdAt,
     });
 
     const mockThreadRepository = new ThreadRepository();
@@ -36,6 +39,7 @@ describe('AddThreadUseCase', () => {
       userId: 'user-123',
       title: useCasePayload.title,
       body: useCasePayload.body,
+      date: useCasePayload.createdAt,
     }));
 
     expect(mockThreadRepository.addThread).toBeCalledWith(
@@ -45,6 +49,7 @@ describe('AddThreadUseCase', () => {
         {
           title: useCasePayload.title,
           body: useCasePayload.body,
+          createdAt: useCasePayload.createdAt,
         },
       ),
     );

@@ -22,6 +22,7 @@ describe('AddCommentUseCase', () => {
       userId: owner,
       title: 'title',
       body: 'body',
+      date: '2023-08-19T09:25:59.754Z',
     });
 
     const mockThreadRepository = new ThreadRepository();

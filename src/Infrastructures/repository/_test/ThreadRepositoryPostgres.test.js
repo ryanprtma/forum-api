@@ -25,11 +25,13 @@ describe('ThreadRepositoryPostgres', () => {
     it('should persist new thread and return thread correctly', async () => {
       // Arrange
       const userId = 'user-123';
+      const createdAt = new Date().toISOString();
       const newThread = new NewThread(
         userId,
         {
           title: 'dicoding',
           body: 'Dicoding Indonesia',
+          createdAt,
         },
       );
       const fakeIdGenerator = () => '123'; // stub!
@@ -46,11 +48,13 @@ describe('ThreadRepositoryPostgres', () => {
     it('should return thread correctly', async () => {
       // Arrange
       const userId = 'user-123';
+      const createdAt = new Date().toISOString();
       const newThread = new NewThread(
         userId,
         {
           title: 'dicoding',
           body: 'Dicoding Indonesia',
+          createdAt,
         },
       );
       const fakeIdGenerator = () => '123'; // stub!
@@ -65,6 +69,7 @@ describe('ThreadRepositoryPostgres', () => {
         userId: 'user-123',
         title: 'dicoding',
         body: 'Dicoding Indonesia',
+        date: createdAt,
       }));
     });
   });
@@ -92,7 +97,8 @@ describe('ThreadRepositoryPostgres', () => {
   describe('verifyThreadOwner function', () => {
     it('should throw NotFoundError when thread not owned by user id', async () => {
       // Arrange
-      ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      const createdAt = new Date().toISOString();
+      ThreadsTableTestHelper.addThread({ id: 'thread-123', createdAt });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert

@@ -18,6 +18,7 @@ describe('NewThread entities', () => {
     const payload = {
       title: 'title',
       body: 1234,
+      createdAt: 1234,
     };
 
     // Action & Assert
@@ -30,6 +31,7 @@ describe('NewThread entities', () => {
     const payload = {
       title: 'title',
       body: 'body',
+      createdAt: new Date().toISOString(),
     };
 
     // Action
@@ -40,5 +42,6 @@ describe('NewThread entities', () => {
     expect(newThread.userId).toEqual(userId);
     expect(newThread.title).toEqual(payload.title);
     expect(newThread.body).toEqual(payload.body);
+    expect(newThread.createdAt).toEqual(payload.createdAt);
   });
 });
