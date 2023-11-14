@@ -3,7 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
-const Thread = require('../../../Domains/threads/entities/Thread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
@@ -64,7 +64,7 @@ describe('ThreadRepositoryPostgres', () => {
       const thread = await threadRepositoryPostgres.addThread(userId, newThread);
 
       // Assert
-      expect(thread).toStrictEqual(new Thread({
+      expect(thread).toStrictEqual(new AddedThread({
         id: 'thread-123',
         userId: 'user-123',
         title: 'dicoding',

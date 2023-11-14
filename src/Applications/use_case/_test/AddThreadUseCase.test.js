@@ -1,5 +1,5 @@
 const NewThread = require('../../../Domains/threads/entities/NewThread');
-const Thread = require('../../../Domains/threads/entities/Thread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const AddThreadUseCase = require('../AddThreadUseCase');
 
@@ -14,7 +14,7 @@ describe('AddThreadUseCase', () => {
       createdAt,
     };
 
-    const mockNewThreadRepository = new Thread({
+    const mockAddedThreadRepository = new AddedThread({
       id: 'thread-123',
       userId: 'user-123',
       title: useCasePayload.title,
@@ -24,17 +24,17 @@ describe('AddThreadUseCase', () => {
 
     const mockThreadRepository = new ThreadRepository();
     mockThreadRepository.addThread = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockNewThreadRepository));
+      .mockImplementation(() => Promise.resolve(mockAddedThreadRepository));
 
     const addThreadUseCase = new AddThreadUseCase({
       threadRepository: mockThreadRepository,
     });
 
     // Act
-    const thread = await addThreadUseCase.execute(userId, useCasePayload);
+    const addedThread = await addThreadUseCase.execute(userId, useCasePayload);
 
     // Assert
-    expect(thread).toStrictEqual(new Thread({
+    expect(addedThread).toStrictEqual(new AddedThread({
       id: 'thread-123',
       userId: 'user-123',
       title: useCasePayload.title,

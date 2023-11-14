@@ -1,6 +1,6 @@
-const Thread = require('../Thread');
+const AddedThread = require('../AddedThread');
 
-describe('Thread entities', () => {
+describe('AddedThread entities', () => {
   it('should throw error when payload not contain needed property', () => {
     // Arrange
     const payload = {
@@ -8,7 +8,7 @@ describe('Thread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new Thread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddedThread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload not meet data type specification', () => {
@@ -22,10 +22,10 @@ describe('Thread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new Thread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new AddedThread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it('should create Thread entities correctly', () => {
+  it('should create AddedThread entities correctly', () => {
     // Arrange
     const payload = {
       id: 'id',
@@ -36,14 +36,14 @@ describe('Thread entities', () => {
     };
 
     // Action
-    const thread = new Thread(payload);
+    const addedThread = new AddedThread(payload);
 
     // Assert
-    expect(thread).toBeInstanceOf(Thread);
-    expect(thread.id).toEqual(payload.id);
-    expect(thread.owner).toEqual(payload.userId);
-    expect(thread.title).toEqual(payload.title);
-    expect(thread.body).toEqual(payload.body);
-    expect(thread.date).toEqual(payload.date);
+    expect(addedThread).toBeInstanceOf(AddedThread);
+    expect(addedThread.id).toEqual(payload.id);
+    expect(addedThread.owner).toEqual(payload.userId);
+    expect(addedThread.title).toEqual(payload.title);
+    expect(addedThread.body).toEqual(payload.body);
+    expect(addedThread.date).toEqual(payload.date);
   });
 });

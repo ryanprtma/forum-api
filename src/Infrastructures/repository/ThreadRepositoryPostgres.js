@@ -1,6 +1,6 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
-const Thread = require('../../Domains/threads/entities/Thread');
+const AddedThread = require('../../Domains/threads/entities/AddedThread');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
@@ -25,7 +25,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
     const thread = { ...result.rows[0] };
 
-    return new Thread({
+    return new AddedThread({
       id: thread.id,
       userId: thread.user_id,
       title: thread.title,
@@ -34,6 +34,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     });
   }
 
+  // TODO: change addedThread To Thread
   async findThreadById(id) {
     const query = {
       text: 'SELECT * FROM threads WHERE id = $1',
@@ -48,7 +49,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
     const thread = { ...result.rows[0] };
 
-    return new Thread({
+    return new AddedThread({
       id: thread.id,
       userId: thread.user_id,
       title: thread.title,

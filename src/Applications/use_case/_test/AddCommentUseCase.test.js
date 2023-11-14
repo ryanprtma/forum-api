@@ -1,6 +1,6 @@
 const NewComment = require('../../../Domains/comments/entitties/NewComment');
 const AddedComment = require('../../../Domains/comments/entitties/AddedComment');
-const Thread = require('../../../Domains/threads/entities/Thread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 
@@ -17,7 +17,7 @@ describe('AddCommentUseCase', () => {
       is_deleted: false,
     };
 
-    const mockNewThreadRepository = new Thread({
+    const mockAddedThreadRepository = new AddedThread({
       id: threadId,
       userId: owner,
       title: 'title',
@@ -27,7 +27,7 @@ describe('AddCommentUseCase', () => {
 
     const mockThreadRepository = new ThreadRepository();
     mockThreadRepository.findThreadById = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockNewThreadRepository));
+      .mockImplementation(() => Promise.resolve(mockAddedThreadRepository));
 
     const mockNewCommentRepository = new AddedComment({
       id: 'comment-123',
