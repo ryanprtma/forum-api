@@ -1,4 +1,5 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const Thread = require('../../Domains/threads/entities/Thread');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 
@@ -51,6 +52,23 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       title: thread.title,
       body: thread.body,
     });
+  }
+
+  async verifyThreadOwner(id, userId) {
+    const query = {
+      text: 'SELECT * FROM threads WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rows.length) {
+      throw new NotFoundError('Thread tidak ditemukan!');
+    }
+
+    const thread = result.rows[0];
+    if (thread.user_id !== userId) {
+      throw new AuthorizationError('Anda tidak berhak mengakses resource ini!');
+    }
   }
 }
 

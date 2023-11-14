@@ -1,6 +1,6 @@
-const InvariantError = require('../../Commons/exceptions/InvariantError');
 const AddedComment = require('../../Domains/comments/entitties/AddedComment');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -23,6 +23,28 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     return new AddedComment({ ...result.rows[0] });
+  }
+
+  async findNotDeletedCommentByIdAndThreadId(id, threadId) {
+    const query = {
+      text: 'SELECT id FROM comments WHERE id = $1 AND thread_id = $2 AND is_deleted = false',
+      values: [id, threadId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError('Comment tidak ditemukan atau thread tidak ditemukan atau comment sudah dihapus!');
+    }
+  }
+
+  async softDeleteComment(id) {
+    const query = {
+      text: 'UPDATE comments set is_deleted = true WHERE id = $1 and is_deleted = false',
+      values: [id],
+    };
+
+    await this._pool.query(query);
   }
 }
 
