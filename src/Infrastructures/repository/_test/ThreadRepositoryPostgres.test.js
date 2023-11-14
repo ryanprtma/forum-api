@@ -1,6 +1,7 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
 const Thread = require('../../../Domains/threads/entities/Thread');
 const pool = require('../../database/postgres/pool');
@@ -65,6 +66,16 @@ describe('ThreadRepositoryPostgres', () => {
         title: 'dicoding',
         body: 'Dicoding Indonesia',
       }));
+    });
+  });
+
+  describe('findThreadById function', () => {
+    it('should throw NotFoundError when thread not exists', async () => {
+      // Arrange
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadRepositoryPostgres.findThreadById('xxx')).rejects.toThrowError(NotFoundError);
     });
   });
 });
