@@ -1,49 +1,49 @@
-const AddedThread = require('../AddedThread');
+const Thread = require('../Thread');
 
-describe('AddedThread entities', () => {
+describe('Thread entities', () => {
   it('should throw error when payload not contain needed property', () => {
     // Arrange
     const payload = {
-      userId: 'userId',
+      username: 'username',
     };
 
     // Action & Assert
-    expect(() => new AddedThread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new Thread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload not meet data type specification', () => {
     // Arrange
     const payload = {
       id: 'thread-123',
-      userId: 'userId',
+      userName: 'username',
       title: 'title',
       body: 1234,
       date: 1234,
     };
 
     // Action & Assert
-    expect(() => new AddedThread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new Thread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it('should create AddedThread entities correctly', () => {
+  it('should create Thread entities correctly', () => {
     // Arrange
     const payload = {
       id: 'id',
-      userId: 'userId',
+      userName: 'username',
       title: 'title',
       body: 'body',
       date: new Date().toISOString(),
     };
 
     // Action
-    const addedThread = new AddedThread(payload);
+    const thread = new Thread(payload);
 
     // Assert
-    expect(addedThread).toBeInstanceOf(AddedThread);
-    expect(addedThread.id).toEqual(payload.id);
-    expect(addedThread.owner).toEqual(payload.userId);
-    expect(addedThread.title).toEqual(payload.title);
-    expect(addedThread.body).toEqual(payload.body);
-    expect(addedThread.date).toEqual(payload.date);
+    expect(thread).toBeInstanceOf(Thread);
+    expect(thread.id).toEqual(payload.id);
+    expect(thread.username).toEqual(payload.userName);
+    expect(thread.title).toEqual(payload.title);
+    expect(thread.body).toEqual(payload.body);
+    expect(thread.date).toEqual(payload.date);
   });
 });

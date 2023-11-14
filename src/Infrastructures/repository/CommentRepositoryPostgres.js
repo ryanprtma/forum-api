@@ -1,4 +1,5 @@
 const AddedComment = require('../../Domains/comments/entitties/AddedComment');
+const Comment = require('../../Domains/comments/entitties/Comment');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
@@ -36,6 +37,26 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (result.rows.length === 0) {
       throw new NotFoundError('Comment tidak ditemukan atau thread tidak ditemukan atau comment sudah dihapus!');
     }
+  }
+
+  async getCommentsWithUser() {
+    const query = {
+      text: 'SELECT comments.*, users.username FROM comments JOIN users ON comments.owner = users.id',
+    };
+
+    const result = await this._pool.query(query);
+
+    const comments = result.rows.map((row) => {
+      const {
+        id, username, content, created_at, is_deleted,
+      } = row;
+
+      return new Comment({
+        id, userName: username, content, created_at, is_deleted,
+      }).entityToCustomFormat();
+    });
+
+    return comments;
   }
 
   async softDeleteComment(id) {
