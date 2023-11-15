@@ -27,15 +27,17 @@ class Comment {
     if (this.is_deleted) {
       return {
         id: this.id,
-        content: '**komentar telah dihapus**',
         username: this.username,
+        date: this.date,
+        content: '**komentar telah dihapus**',
       };
     }
 
     return {
       id: this.id,
-      content: this.content,
       username: this.username,
+      date: this.date,
+      content: this.content,
     };
   }
 }

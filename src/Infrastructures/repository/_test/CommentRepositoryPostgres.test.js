@@ -20,7 +20,6 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   afterAll(async () => {
-    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
     await pool.end();
@@ -92,18 +91,35 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
+  describe('getCommentsWithUser function', () => {
+    it('should return comment with user correctly', async () => {
+      // Arrange
+      const createdAt = new Date().toISOString();
+      CommentsTableTestHelper.addComment({ id: 'comment-123', created_at: createdAt });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const commentsWithUser = await commentRepositoryPostgres.getCommentsWithUser('thread-123');
+
+      // Assert
+      expect(commentsWithUser).toHaveLength(1);
+    });
+  });
+
   describe('softDeleteComment function', () => {
     it('should soft delete comment from database', async () => {
       // Arrange
-      CommentsTableTestHelper.addComment({ id: 'comment-124', created_at: new Date().toISOString() });
+      await CommentsTableTestHelper.addComment({ id: 'comment-124', created_at: new Date().toISOString() });
       // Action
-      const fakeIdGenerator = () => '123'; // stub!
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
       await commentRepositoryPostgres.softDeleteComment('comment-124');
 
       // Assert
       const deletedComment = await CommentsTableTestHelper.findDeletedCommentById('comment-124');
       expect(deletedComment).toHaveLength(1);
+      expect(deletedComment[0].id).toEqual('comment-124');
+      expect(deletedComment[0].is_deleted).toEqual(true);
     });
   });
 });

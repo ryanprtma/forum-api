@@ -18,7 +18,7 @@ class AddCommentUseCase {
 
     const newComment = new NewComment(payload);
     const addedComment = await this._commentRepository.addComment(newComment);
-    return addedComment;
+    return addedComment.entityToCustomFormat();
   }
 }
 

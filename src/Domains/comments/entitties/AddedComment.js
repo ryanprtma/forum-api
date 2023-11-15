@@ -24,7 +24,7 @@ class AddedComment {
     }
   }
 
-  entityToResponse() {
+  entityToCustomFormat() {
     return {
       id: this.id,
       content: this.content,

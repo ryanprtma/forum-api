@@ -61,12 +61,10 @@ class ThreadsHandler {
     const addedCommentUseCase = this._container.getInstance(AddCommentUseCase.name);
     const addedComment = await addedCommentUseCase.execute(userId, id, useCasePayload);
 
-    const addedCommentResp = new AddedComment(addedComment).entityToResponse();
-
     const response = h.response({
       status: 'success',
       data: {
-        addedComment: addedCommentResp,
+        addedComment,
       },
     });
     response.code(201);

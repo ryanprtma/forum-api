@@ -58,7 +58,7 @@ describe('AddCommentUseCase', () => {
       content: useCasePayload.content,
       created_at: useCasePayload.created_at,
       is_deleted: useCasePayload.is_deleted,
-    }));
+    }).entityToCustomFormat());
 
     expect(mockCommentRepository.addComment).toBeCalledWith(
       new NewComment(

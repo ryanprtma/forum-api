@@ -47,4 +47,49 @@ describe('Comment entities', () => {
     expect(comment.date).toEqual(payload.created_at);
     expect(comment.is_deleted).toEqual(payload.is_deleted);
   });
+
+  it('should create custom Comment format correctly', () => {
+    // Arrange
+    const payload = {
+      id: 'comment-123',
+      userName: 'user-123',
+      content: 'content',
+      created_at: '2023-08-19T09:25:59.754Z',
+      is_deleted: false,
+    };
+
+    const customCommentFormat = {
+      id: payload.id,
+      username: payload.userName,
+      date: payload.created_at,
+      content: payload.content,
+    };
+
+    // Action
+    const comment = new Comment(payload).entityToCustomFormat();
+
+    // Assert
+    expect(comment).toStrictEqual(customCommentFormat);
+  });
+
+  it('entityToCustomFormat when is_deleted is true', () => {
+    const deletedComment = new Comment(
+      {
+        id: 'comment-123',
+        userName: 'user-123',
+        content: 'content',
+        created_at: '2023-08-19T09:25:59.754Z',
+        is_deleted: true,
+      },
+    );
+
+    const formattedComment = deletedComment.entityToCustomFormat();
+
+    expect(formattedComment).toEqual({
+      id: 'comment-123',
+      username: 'user-123',
+      date: '2023-08-19T09:25:59.754Z',
+      content: '**komentar telah dihapus**',
+    });
+  });
 });

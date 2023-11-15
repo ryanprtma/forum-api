@@ -23,6 +23,21 @@ const ThreadsTableTestHelper = {
     return result.rows;
   },
 
+  async findThreadByIdWithUser(id) {
+    const query = {
+      text: 'SELECT threads.*, users.username FROM threads JOIN users ON threads.user_id = users.id WHERE threads.id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError('Thread tidak ditemukan!');
+    }
+
+    return result;
+  },
+
   async cleanTable() {
     await pool.query('DELETE FROM threads WHERE 1=1');
   },

@@ -53,7 +53,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
       return new Comment({
         id, userName: username, content, created_at, is_deleted,
-      }).entityToCustomFormat();
+      });
     });
 
     return comments;
@@ -61,7 +61,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async softDeleteComment(id) {
     const query = {
-      text: 'UPDATE comments set is_deleted = true WHERE id = $1 and is_deleted = false',
+      text: 'UPDATE comments set is_deleted = true WHERE id = $1',
       values: [id],
     };
 
