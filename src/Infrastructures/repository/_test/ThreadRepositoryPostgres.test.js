@@ -97,11 +97,22 @@ describe('ThreadRepositoryPostgres', () => {
     it('should throw AuthorizationError when thread not owned by user id', async () => {
       // Arrange
       const createdAt = new Date().toISOString();
-      ThreadsTableTestHelper.addThread({ id: 'thread-123', createdAt });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', createdAt });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
       await expect(threadRepositoryPostgres.verifyThreadOwner('thread-123', 'xxx')).rejects.toThrowError(AuthorizationError);
+    });
+
+    it('should not throw an error if the comment exists or user authorized', async () => {
+      // Arrange
+      const createdAt = new Date().toISOString();
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123', createdAt });
+
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & assert
+      await expect(threadRepositoryPostgres.verifyThreadOwner('thread-123', 'user-123')).resolves.not.toThrow();
     });
   });
 
@@ -118,7 +129,7 @@ describe('ThreadRepositoryPostgres', () => {
     it('should return thread with user correctly', async () => {
       // Arrange
       const createdAt = new Date().toISOString();
-      ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123', createdAt });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123', createdAt });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 

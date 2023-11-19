@@ -82,6 +82,17 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('findNotDeletedCommentByIdAndThreadId function', () => {
+    it('should not throw an error if the comment exists and is not deleted', async () => {
+      // Arrange
+      const createdAt = new Date().toISOString();
+      await CommentsTableTestHelper.addComment({ id: 'comment-123', created_at: createdAt, thread_id: 'thread-123' });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & assert
+      await expect(commentRepositoryPostgres.findNotDeletedCommentByIdAndThreadId('comment-123', 'thread-123')).resolves.not.toThrow();
+    });
+
     it('should throw NotFoundError when not deleted comment by id and thread id from database not exists', async () => {
       // Arrange
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
@@ -91,29 +102,29 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
-  describe('getCommentsWithUser function', () => {
+  describe('getCommentsByThreadIdWithUser function', () => {
     it('should return comment with user correctly', async () => {
       // Arrange
       const createdAt = new Date().toISOString();
-      CommentsTableTestHelper.addComment({ id: 'comment-123', created_at: createdAt });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id: 'thread-123', created_at: createdAt });
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action
-      const commentsWithUser = await commentRepositoryPostgres.getCommentsWithUser('thread-123');
+      const commentsWithUser = await commentRepositoryPostgres.getCommentsByThreadIdWithUser('thread-123');
 
       // Assert
       expect(commentsWithUser).toHaveLength(1);
     });
   });
 
-  describe('softDeleteComment function', () => {
+  describe('deleteComment function', () => {
     it('should soft delete comment from database', async () => {
       // Arrange
       await CommentsTableTestHelper.addComment({ id: 'comment-124', created_at: new Date().toISOString() });
       // Action
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-      await commentRepositoryPostgres.softDeleteComment('comment-124');
+      await commentRepositoryPostgres.deleteComment('comment-124');
 
       // Assert
       const deletedComment = await CommentsTableTestHelper.findDeletedCommentById('comment-124');

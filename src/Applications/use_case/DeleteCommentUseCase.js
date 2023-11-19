@@ -8,7 +8,7 @@ class DeleteCommentUseCase {
     await this._commentRepository.findNotDeletedCommentByIdAndThreadId(id, threadId);
     await this._threadRepository.verifyThreadOwner(threadId, userId);
 
-    return this._commentRepository.softDeleteComment(id);
+    return this._commentRepository.deleteComment(id);
   }
 }
 

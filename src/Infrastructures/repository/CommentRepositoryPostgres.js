@@ -39,27 +39,18 @@ class CommentRepositoryPostgres extends CommentRepository {
     }
   }
 
-  async getCommentsWithUser() {
+  async getCommentsByThreadIdWithUser(threadId) {
     const query = {
-      text: 'SELECT comments.*, users.username FROM comments JOIN users ON comments.owner = users.id',
+      text: 'SELECT comments.*, users.username FROM comments JOIN users ON comments.owner = users.id WHERE thread_id = $1',
+      values: [threadId],
     };
 
     const result = await this._pool.query(query);
 
-    const comments = result.rows.map((row) => {
-      const {
-        id, username, content, created_at, is_deleted,
-      } = row;
-
-      return new Comment({
-        id, userName: username, content, created_at, is_deleted,
-      });
-    });
-
-    return comments;
+    return result.rows;
   }
 
-  async softDeleteComment(id) {
+  async deleteComment(id) {
     const query = {
       text: 'UPDATE comments set is_deleted = true WHERE id = $1',
       values: [id],

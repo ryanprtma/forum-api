@@ -8,9 +8,15 @@ class GetThreadWithDetailUseCase {
 
   async execute(id) {
     const thread = await this._threadRepository.findThreadByIdWithUser(id);
-    const comments = await this._commentRepository.getCommentsWithUser();
+    const comments = await this._commentRepository.getCommentsByThreadIdWithUser(id);
 
-    const customComments = await comments.map((comment) => comment.entityToCustomFormat());
+    const customComments = await comments.map((comment) => new Comment({
+      id: comment.id,
+      userName: comment.username,
+      content: comment.content,
+      created_at: comment.created_at,
+      is_deleted: comment.is_deleted,
+    }).entityToCustomFormat());
     return {
       ...thread,
       comments: customComments,

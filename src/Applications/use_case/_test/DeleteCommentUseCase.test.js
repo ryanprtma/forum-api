@@ -15,7 +15,7 @@ describe('DeleteCommentUseCase', () => {
     mockThreadRepository.verifyThreadOwner = jest.fn()
       .mockImplementation(() => Promise.resolve());
 
-    mockCommentRepository.softDeleteComment = jest.fn()
+    mockCommentRepository.deleteComment = jest.fn()
       .mockImplementation(() => Promise.resolve());
 
     const deleteCommentUseCase = new DeleteCommentUseCase({
@@ -31,7 +31,7 @@ describe('DeleteCommentUseCase', () => {
       .toBeCalledWith('comment-123', 'thread-123');
     expect(mockThreadRepository.verifyThreadOwner)
       .toBeCalledWith('thread-123', 'user-123');
-    expect(mockCommentRepository.softDeleteComment)
+    expect(mockCommentRepository.deleteComment)
       .toBeCalledWith('comment-123');
   });
 });

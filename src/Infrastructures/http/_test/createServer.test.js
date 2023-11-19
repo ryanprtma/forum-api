@@ -56,25 +56,4 @@ describe('HTTP server', () => {
 
     expect(response.statusCode).toEqual(401);
   });
-
-  // it('should reject with an invalid token', async () => {
-  //   // Arrange
-  //   const threadId = 'thread-123';
-  //   const requestPayload = {
-  //     content: 'content',
-  //     created_at: '2023-08-19T09:25:59.754Z',
-  //     is_deleted: false,
-  //   };
-  //   const server = await createServer({}); // fake injection
-
-  //   // Action
-  //   const response = await server.inject({
-  //     method: 'POST',
-  //     url: '/comments',
-  //     headers: { Authorization: 'Bearer invalidToken' },
-  //     payload: requestPayload,
-  //   });
-
-  //   expect(response.statusCode).toEqual(401);
-  // });
 });

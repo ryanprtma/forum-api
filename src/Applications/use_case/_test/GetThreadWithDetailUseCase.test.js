@@ -8,7 +8,7 @@ const GetThreadWithDetailUseCase = require('../GetThreadWithDetailUseCase');
 describe('GetThreadWithDetailUseCase', () => {
   it('should orchestrating the get thread with detail action correctly', async () => {
     // Arrange
-    const useCasePayload = 'comment-123';
+    const useCasePayload = 'thread-123';
     const createdAt = new Date().toISOString();
 
     const mockExistsThreadRepository = new Thread({
@@ -19,15 +19,15 @@ describe('GetThreadWithDetailUseCase', () => {
       date: createdAt,
     });
 
-    const mockExistsCommentRepository = new Comment({
+    const mockExistsCommentRepository = [{
       id: 'comment-123',
-      userName: 'user-123',
+      owner: 'user-123',
+      thread_id: 'thread-123',
       content: 'content',
       created_at: createdAt,
       is_deleted: false,
-    });
-
-    const momckedComments = [mockExistsCommentRepository];
+      username: 'user-123',
+    }];
 
     const mockThreadRepository = new ThreadRepository();
 
@@ -35,16 +35,16 @@ describe('GetThreadWithDetailUseCase', () => {
       .mockImplementation(() => Promise.resolve(mockExistsThreadRepository));
 
     const mockCommentRepository = new CommentRepository();
-    mockCommentRepository.getCommentsWithUser = jest.fn()
-      .mockImplementation(() => Promise.resolve(momckedComments));
+    mockCommentRepository.getCommentsByThreadIdWithUser = jest.fn()
+      .mockImplementation(() => Promise.resolve(mockExistsCommentRepository));
 
-    const addCommentUseCase = new GetThreadWithDetailUseCase({
+    const getThreadWithDetailUseCase = new GetThreadWithDetailUseCase({
       commentRepository: mockCommentRepository,
       threadRepository: mockThreadRepository,
     });
 
     // Act
-    const threadWithDetail = await addCommentUseCase.execute(useCasePayload);
+    const threadWithDetail = await getThreadWithDetailUseCase.execute(useCasePayload);
 
     // Assert
     expect(threadWithDetail).toStrictEqual(
@@ -66,6 +66,6 @@ describe('GetThreadWithDetailUseCase', () => {
     );
 
     expect(mockThreadRepository.findThreadByIdWithUser).toBeCalledWith(useCasePayload);
-    expect(mockCommentRepository.getCommentsWithUser).toBeCalled();
+    expect(mockCommentRepository.getCommentsByThreadIdWithUser).toBeCalledWith(useCasePayload);
   });
 });
