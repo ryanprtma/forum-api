@@ -92,4 +92,42 @@ describe('Comment entities', () => {
       content: '**komentar telah dihapus**',
     });
   });
+
+  describe('entityToCustomFormat', () => {
+    it('should return object in custom format when not deleted', () => {
+      const payload = {
+        id: 'comment_id',
+        userName: 'user_name',
+        content: 'This is a comment',
+        created_at: '2023-11-21',
+        is_deleted: false,
+      };
+      const comment = new Comment(payload);
+      const customFormat = comment.entityToCustomFormat();
+      expect(customFormat).toEqual({
+        id: payload.id,
+        username: payload.userName,
+        date: payload.created_at,
+        content: payload.content,
+      });
+    });
+
+    it('should return object in custom format when deleted', () => {
+      const payload = {
+        id: 'comment_id',
+        userName: 'user_name',
+        content: 'This is a comment',
+        created_at: '2023-08-19T09:25:59.754Z',
+        is_deleted: true,
+      };
+      const comment = new Comment(payload);
+      const customFormat = comment.entityToCustomFormat();
+      expect(customFormat).toEqual({
+        id: payload.id,
+        username: payload.userName,
+        date: payload.created_at,
+        content: '**komentar telah dihapus**',
+      });
+    });
+  });
 });
