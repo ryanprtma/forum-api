@@ -51,4 +51,24 @@ describe('AddedComment entities', () => {
     expect(addedComment.created_at).toEqual(payload.created_at);
     expect(addedComment.is_deleted).toEqual(payload.is_deleted);
   });
+
+  describe('entityToCustomFormat', () => {
+    it('should return object in custom format', () => {
+      const payload = {
+        id: 'comment_id',
+        owner: 'user_id',
+        thread_id: 'thread_id',
+        content: 'This is a comment',
+        created_at: '2023-11-21',
+        is_deleted: false,
+      };
+      const comment = new AddedComment(payload);
+      const customFormat = comment.entityToCustomFormat();
+      expect(customFormat).toEqual({
+        id: payload.id,
+        content: payload.content,
+        owner: payload.owner,
+      });
+    });
+  });
 });
