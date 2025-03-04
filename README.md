@@ -81,6 +81,8 @@ The Forum API is a RESTful API designed to build discussion forums. This API pro
    npm run test:watch
    ```
 
+## Postman Collection
+Open this https://github.com/ryanprtma/forum-api/tree/postman-collection to use postman collection
 ## Contribution
 
 1. Fork this repository.
